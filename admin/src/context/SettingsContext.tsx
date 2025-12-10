@@ -1,14 +1,23 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useState, useEffect, useCallback } from 'react';
 
-interface SettingsData {
+interface Config {
     apiUrl: string;
     nonce: string;
     version: string;
     devMode: boolean;
 }
 
+// Define your plugin options here
+export interface PluginOptions {
+    [key: string]: unknown;
+}
+
 interface SettingsContextType {
-    settings: SettingsData;
+    config: Config;
+    options: PluginOptions;
+    loading: boolean;
+    updateOption: (key: string, value: unknown) => void;
+    saveOptions: () => Promise<void>;
     fetchClient: <T = unknown>(endpoint: string, data?: unknown, method?: string) => Promise<T>;
 }
 
@@ -25,12 +34,14 @@ export const useSettings = () => {
 
 interface SettingsProviderProps {
     children: ReactNode;
-    value: SettingsData;
+    value: Config;
 }
 
 export const SettingsProvider = ({ children, value }: SettingsProviderProps) => {
+    const [options, setOptions] = useState<PluginOptions>({});
+    const [loading, setLoading] = useState(true);
 
-    const fetchClient = async <T = unknown>(endpoint: string, data?: unknown, method: string = 'GET'): Promise<T> => {
+    const fetchClient = useCallback(async <T = unknown>(endpoint: string, data?: unknown, method: string = 'GET'): Promise<T> => {
         const url = `${value.apiUrl}${endpoint}`;
 
         const headers: HeadersInit = {
@@ -55,10 +66,43 @@ export const SettingsProvider = ({ children, value }: SettingsProviderProps) => 
         }
 
         return response.json();
-    };
+    }, [value]);
+
+    useEffect(() => {
+        fetchClient<PluginOptions>('/settings')
+            .then((data) => {
+                setOptions(data);
+            })
+            .catch((err) => console.error('Failed to load settings:', err))
+            .finally(() => setLoading(false));
+    }, [fetchClient]);
+
+    const updateOption = useCallback((key: string, val: unknown) => {
+        setOptions(prev => ({
+            ...prev,
+            [key]: val
+        }));
+    }, []);
+
+    const saveOptions = useCallback(async () => {
+        try {
+            const saved = await fetchClient<PluginOptions>('/settings', options, 'POST');
+            setOptions(saved);
+        } catch (e) {
+            console.error('Failed to save settings:', e);
+            throw e;
+        }
+    }, [fetchClient, options]);
 
     return (
-        <SettingsContext.Provider value={{ settings: value, fetchClient }}>
+        <SettingsContext.Provider value={{
+            config: value,
+            options,
+            updateOption,
+            saveOptions,
+            loading,
+            fetchClient
+        }}>
             {children}
         </SettingsContext.Provider>
     );
