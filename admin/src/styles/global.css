@@ -1,0 +1,13 @@
+@import "tailwindcss" source("../../../");
+
+.settings_page_plugin-base {
+    #wpcontent {
+        padding: 0;
+    }
+
+    #wpbody-content {
+        padding: 0;
+    }
+
+    #wpfooter {}
+}
