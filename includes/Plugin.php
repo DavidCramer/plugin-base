@@ -35,6 +35,9 @@ class Plugin {
 	public static function init() {
 		$self = new self();
 
+		// Initialize API.
+		Api::init();
+
 		// Admin-specific hooks.
 		if ( is_admin() ) {
 			add_action( 'admin_menu', [ $self, 'add_settings_page' ] );
@@ -48,8 +51,8 @@ class Plugin {
 	 */
 	public function add_settings_page() {
 		add_options_page(
-				'PluginBase',
-				'PluginBase',
+				'Plugin Base',
+				'Plugin Base',
 				'manage_options',
 				'plugin-base',
 				[ $this, 'render_settings_page' ]
@@ -61,13 +64,13 @@ class Plugin {
 	 */
 	public function render_settings_page() {
 		$appData = [
-				'apiUrl'  => rest_url( 'plugin-base/v1' ),
+				'apiUrl'  => rest_url( Api::NAMESPACE ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 				'version' => PLUGIN_BASE_VERSION,
 				'devMode' => ! empty( $this->dev_mode ),
 		];
 		?>
-		<div id="plugin-base-root">
+		<div id="plugin-base-root" class="wrap">
 			<div id="root" data-config="<?php echo esc_attr( wp_json_encode( $appData ) ); ?>"></div>
 		</div>
 		<?php

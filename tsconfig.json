@@ -21,15 +21,12 @@
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
-      "@/core/*": [
-        "../src/*"
-      ],
       "@/*": [
-        "./src/*"
+        "./admin/src/*"
       ]
     }
   },
   "include": [
-    "src"
+    "admin/src"
   ]
 }
