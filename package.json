@@ -8,7 +8,8 @@
         "build": "vite build",
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit",
+        "setup": "node scripts/setup.js"
     },
     "dependencies": {
         "react": "^19.2.0",
