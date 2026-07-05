@@ -7,6 +7,10 @@
 
 namespace PluginBase;
 
+use PluginBase\Admin\Assets;
+use PluginBase\Admin\Menu;
+use PluginBase\Admin\RestController;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -19,6 +23,13 @@ class Plugin {
 	 * @var Plugin|null
 	 */
 	private static ?Plugin $instance = null;
+
+	/**
+	 * Holds the Components
+	 *
+	 * @var array
+	 */
+	private $components = [];
 
 	/**
 	 * Dev mode flag. False, or the Vite dev server port as a string.
@@ -52,15 +63,33 @@ class Plugin {
 	 * Wire up the plugin's components.
 	 */
 	private function boot(): void {
-		( new Route\RouteRegistrar() )->init();
-		( new Admin\RestController() )->init();
+		$this->components = [
+			'rest' => new RestController(),
+		];
 
 		if ( is_admin() ) {
-			$menu = new Admin\Menu();
-			$menu->init();
-
-			( new Admin\Assets( $this, $menu ) )->init();
+			$this->components['menu']   = new Admin\Menu();
+			$this->components['assets'] = new Admin\Assets( $this );
 		}
+
+		foreach ( $this->components as $component => $instance ) {
+			if ( method_exists( $instance, 'init' ) ) {
+				$instance->init();
+			}
+		}
+
+		do_action( 'plugin_base_loaded', $this );
+	}
+
+	/**
+	 * Get a plugin component.
+	 *
+	 * @param string $component The component to get.
+	 *
+	 * @returns Assets|RestController|Menu|null
+	 */
+	public function get_component( string $component ): Assets|RestController|Menu|null {
+		return $this->components[ $component ] ?? null;
 	}
 
 	/**

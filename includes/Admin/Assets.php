@@ -19,9 +19,9 @@ class Assets {
 	private Plugin $plugin;
 	private Menu $menu;
 
-	public function __construct( Plugin $plugin, Menu $menu ) {
+	public function __construct( Plugin $plugin ) {
 		$this->plugin = $plugin;
-		$this->menu   = $menu;
+		$this->menu   = $this->plugin->get_component('menu');
 	}
 
 	/**
