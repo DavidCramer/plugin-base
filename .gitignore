@@ -1,2 +1,3 @@
-node_modules
-admin/build
+node_modules/
+build/
+.dev-server-running

@@ -1,21 +1,20 @@
 {
     "name": "plugin-base",
     "version": "1.0.0",
-    "description": "PluginBase Boilerplate",
+    "description": "PluginBase admin app",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "type-check": "tsc --noEmit",
-        "setup": "node scripts/setup.js"
+        "type-check": "tsc --noEmit"
     },
     "dependencies": {
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
-        "tailwindcss-animate": "^1.0.7",
-        "react-icons": "5.5.0"
+        "@monaco-editor/react": "^4.6.0",
+        "lucide-react": "^0.468.0"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.17",

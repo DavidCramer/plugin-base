@@ -4,7 +4,7 @@ import { resolve } from 'path';
 /**
  * Vite plugin that creates a file when the dev server starts
  * and deletes it when the server stops.
- * 
+ *
  * @param {Object} options - Plugin options
  * @param {string} options.filePath - Path to the file to create (relative to project root)
  * @param {string|Function} options.content - Content to write to the file (default: actual port number)

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import devFilePlugin from './admin/src/vite-plugin-dev-file.js';
+import devFilePlugin from './dev/vite-plugin-dev-file.js';
 import { resolve } from 'path';
 
 // https://vitejs.dev/config/
@@ -13,16 +13,16 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, './admin/src')
+            '@': resolve(__dirname, './src')
         },
     },
     build: {
-        outDir: 'admin/build',
+        outDir: 'build',
         emptyOutDir: true,
-        manifest: true,
+        manifest: 'manifest.json',
         rollupOptions: {
             input: {
-                main: resolve(__dirname, './admin/src/main.tsx'),
+                main: resolve(__dirname, './src/main.tsx'),
             },
             output: {
                 entryFileNames: 'js/[name]-[hash].js',
@@ -31,17 +31,15 @@ export default defineConfig({
                     if (assetInfo.name?.endsWith('.css')) {
                         return 'css/[name]-[hash][extname]';
                     }
-                    return 'build/[name]-[hash][extname]';
+                    return 'assets/[name]-[hash][extname]';
                 },
             },
         },
-        // Generate source maps in development
         sourcemap: process.env.NODE_ENV === 'development',
-        // Minify in production
         minify: process.env.NODE_ENV === 'production' ? 'esbuild' : false,
     },
     server: {
-        port: 3001,
+        port: 3010,
         open: false,
         cors: true,
     },

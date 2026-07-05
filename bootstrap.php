@@ -1,16 +1,16 @@
 <?php
 /**
- * Bootstrap
+ * PluginBase Bootstrap.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Simple SPL Autoloader for 'PluginBase' namespace mapped to 'includes' directory
+// PSR-4 autoloader for the 'PluginBase' namespace mapped to the 'includes' directory.
 spl_autoload_register( function ( $class ) {
 	$prefix   = 'PluginBase\\';
-	$base_dir = plugin_dir_path( __FILE__ ) . 'includes/';
+	$base_dir = PLUGIN_BASE_PATH . 'includes/';
 
 	$len = strlen( $prefix );
 	if ( strncmp( $prefix, $class, $len ) !== 0 ) {
@@ -25,7 +25,4 @@ spl_autoload_register( function ( $class ) {
 	}
 } );
 
-// Initialize the Plugin
-if ( class_exists( 'PluginBase\\Plugin' ) ) {
-	PluginBase\Plugin::init();
-}
+add_action( 'plugins_loaded', [ 'PluginBase\\Plugin', 'init' ] );
