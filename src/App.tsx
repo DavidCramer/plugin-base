@@ -36,7 +36,7 @@ function Shell () {
     <div className="flex h-full overflow-hidden flex-col bg-canvas text-text">
       <header className="flex h-18 shrink-0 items-center justify-between bg-header-bar px-5 text-white">
         <div className="inline-flex items-center justify-between gap-2">
-          <h1 className="text-white! p-0! m-0!">PluginBase</h1>
+          <h1 className="text-white! p-0! m-0!">Plugin Base</h1>
           <span className="text-white! py-1 px-2 rounded-sm bg-white/10 font-mono text-xs">v{version}</span>
         </div>
         {currentItem && (
