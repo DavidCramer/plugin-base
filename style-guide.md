@@ -16,11 +16,14 @@ If a tool is ever built **outside** wp-admin (standalone app), do not invent a n
 ## Color tokens
 
 ```
+Inherited from WordPress
+--header-bar:       var(--wp-admin-theme-color-darker-10--rgb)   plugin's own title bar — the ONE strong-color surface
+--accent:           var(--wp-admin-theme-color--rgb)   primary buttons, active tabs, links, toggle-on, selected states
+--accent-hover:     var(--wp-admin-theme-color-darker-20--rgb)
+
+Custom
 --canvas:          #F5F6F8   workspace/background behind panels
 --panel:            #FFFFFF   cards, blocks, side panels
---header-bar:       #4457E8   plugin's own title bar — the ONE strong-color surface
---accent:           #3B5FE0   primary buttons, active tabs, links, toggle-on, selected states
---accent-hover:     #2F4EC7
 --border:           #E5E7EB   default dividers, card/input borders
 --border-strong:    #D8DBE0   input borders, more prominent dividers
 --text:             #1F2328   headings, body copy
@@ -29,7 +32,7 @@ If a tool is ever built **outside** wp-admin (standalone app), do not invent a n
 ```
 
 Rules:
-- The accent color (`#3B5FE0`) is used **functionally only** — primary actions, active/selected state, links, focus rings, toggle-on. Never decoratively (no accent backgrounds on static content, no accent text for emphasis alone).
+- The accent color (`var(--wp-admin-theme-color--rgb)`) is used **functionally only** — primary actions, active/selected state, links, focus rings, toggle-on. Never decoratively (no accent backgrounds on static content, no accent text for emphasis alone).
 - Everything you design is light. Do not add new dark panels/surfaces of your own — the header bar is the one exception, and it stays a simple bar (title + primary actions), never bleeding into nav or content areas.
 - Depth comes from a 1px border and a subtle background-shade step (`--panel` vs `--canvas`), not shadows. Reserve shadow/elevation for modals only.
 
@@ -50,7 +53,7 @@ System UI sans-serif stack only. No display face. Hierarchy comes from weight an
 - Base unit: 4px. Padding steps: 4 / 8 / 12 / 16 / 24px.
 - Row rhythm inside panels/lists: 8–12px vertical. Section-to-section gaps: 24px+.
 - Row height in dense lists/tables: ~36–44px.
-- Radius: 4–6px on controls (buttons, inputs, list rows). 8px on containers (cards, blocks, modals). Nothing pill-shaped except toggles and segmented controls.
+- Radius: max 6px on controls (buttons, inputs, list rows). 4px on containers (cards, blocks, modals). Nothing pill-shaped except toggles.
 - Borders: 1px solid `--border` (or `--border-strong` on inputs) everywhere structure needs to read.
 
 ## Layout structure
