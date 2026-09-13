@@ -1,63 +1,64 @@
 @import "tailwindcss";
 
 /* Design tokens from ../../style-guide.md */
-@theme {
-	--color-canvas: #F5F6F8;
-	--color-panel: #FFFFFF;
-	--color-header-bar: #4457E8;
-	--color-accent: #3B5FE0;
-	--color-accent-hover: #2F4EC7;
-	--color-border: #E5E7EB;
-	--color-border-strong: #D8DBE0;
-	--color-text: #1F2328;
-	--color-text-secondary: #6B7280;
-	--color-text-muted: #9CA3AF;
-	--color-danger: #DC2626;
-	--color-danger-border: #F3D2D2;
-
-	--font-mono: SFMono-Regular, Consolas, Menlo, monospace;
-}
 
 body {
-	color: var(--color-text);
+    color: var(--color-text);
 
-	#wpwrap {
-		@apply h-full overflow-hidden;
+    #wpwrap {
+        @apply h-full overflow-hidden;
 
-		#wpcontent {
-			@apply h-full overflow-hidden;
-			padding: 0;
-			position: relative;
-			--color-accent: rgb(var(--wp-admin-theme-color--rgb));
-			--color-accent-hover: rgb(var(--wp-admin-theme-color-darker-20--rgb));
-			--color-header-bar: rgb(var(--wp-admin-theme-color-darker-10--rgb));
+        #wpcontent {
+            @apply h-full overflow-hidden;
+            padding: 0;
+            position: relative;
 
 
+            .notice {
+                display: none !important;
+            }
 
-			.notice {
-				display: none !important;
-			}
+            #wpbody {
+                @apply h-full overflow-hidden;
 
-			#wpbody {
-				@apply h-full overflow-hidden;
+                position: relative;
 
-				position: relative;
+                #wpbody-content {
+                    @apply h-full pb-0 md:pb-10.25;
+                    position: relative;
 
-				#wpbody-content {
-					@apply h-full pb-0 md:pb-10.25;
-					position: relative;
+                    .plugin-base-app {
+                        @apply h-full overflow-hidden max-w-350 shadow-md;
+                    }
+                }
+            }
+        }
 
-					.plugin-base-app{
-						@apply h-full overflow-hidden max-w-350 shadow-md;
-					}
-				}
-			}
-		}
+        #wpfooter {
+            background: #f0f0f1;
+            border-top: 1px solid #e5e5e5;
+            @apply fixed;
+        }
+    }
+}
 
-		#wpfooter {
-			background: #f0f0f1;
-			border-top: 1px solid #e5e5e5;
-			@apply fixed;
-		}
-	}
+.archetype-components {
+
+    --color-primary: rgb(var(--wp-admin-theme-color--rgb));
+    --color-primary-dark: color-mix(in oklab, var(--color-primary) 95%, #000);
+    --color-primary-hover: color-mix(in oklab, var(--color-primary) 95%, #000);
+    --color-primary-light: color-mix(in oklab, var(--color-primary) 4%, #FFF);
+    --color-tinted-black: color-mix(in oklab, #000, var(--color-primary) 30%);
+    --color-canvas: color-mix(in oklab, #fff, var(--color-tinted-black) 6%);
+    --color-canvas-dark: color-mix(in oklab, #fff, var(--color-tinted-black) 9%);
+    --color-canvas-light: color-mix(in oklab, #fff, var(--color-tinted-black) 3%);
+    --color-surface: color-mix(in oklab, #fff, var(--color-tinted-black) 3%);
+    --color-surface-dark: color-mix(in oklab, #fff, var(--color-tinted-black) 6%);
+    --color-surface-light: color-mix(in oklab, #fff, var(--color-tinted-black) 3%);
+    --color-header-bar: color-mix(in oklab, var(--color-primary) 95%, #fff);
+    --color-panel: #FFFFFF;
+    --color-secondary: #8c96aa;
+    --color-secondary-dark: color-mix(in oklab, var(--color-secondary) 95%, #000);
+    --color-secondary-light: color-mix(in oklab, var(--color-secondary) 9%, #FFF);
+
 }

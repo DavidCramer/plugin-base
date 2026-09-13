@@ -53,13 +53,14 @@ class Menu {
 	 */
 	public function render(): void {
 		$data = [
-			'apiBase' => esc_url_raw( rest_url( 'plugin-base/v1' ) ),
+			'apiBase' => esc_url_raw( rest_url( 'plugin-base/v1/' ) ),
 			'nonce'   => wp_create_nonce( 'wp_rest' ),
+			'slug'    => 'plugin-base',
 			'version' => PLUGIN_BASE_VERSION,
 		];
 		?>
-		<div id="plugin-base-root" class="plugin-base-app"></div>
-		<script type="application/json" id="plugin-base-data"><?php echo wp_json_encode( $data ); ?></script>
+        <div id="plugin-base-root" class="plugin-base-app"></div>
+        <script type="application/json" id="archetype-data"><?php echo wp_json_encode( $data ); ?></script>
 		<?php
 	}
 }

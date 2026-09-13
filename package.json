@@ -11,7 +11,8 @@
     "setup": "node scripts/setup.js"
   },
   "dependencies": {
-    "archetype": "git@github.com:DavidCramer/archetype-components.git",
+    "@wordpress/api-fetch": "^7.55.0",
+    "archetype": "git@github.com:DavidCramer/archetype-components.git#develop",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

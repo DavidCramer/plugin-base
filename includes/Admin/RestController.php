@@ -18,7 +18,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class RestController {
 
+	/**
+	 * The namespace for the REST API.
+	 */
 	const NAMESPACE = 'plugin-base/v1';
+
+	/**
+	 * Holds the singular item type name for the REST API.
+	 * @var string
+	 */
+	const ITEM_TYPE_SINGLE = 'item';
+
+	/**
+	 * Holds the plural item type name for the REST API.
+	 * @var string
+	 */
+	const ITEM_TYPE_PLURAL = 'items';
+
 
 	/**
 	 * Hook into rest_api_init.
@@ -29,12 +45,12 @@ class RestController {
 
 	public function get_endpoint_definitions() {
 		$endpoints = [
-			'items'               => [
-				'get' => [
-					'callback' => [ $this, 'list_items' ],
+			self::ITEM_TYPE_PLURAL                           => [
+				'get'  => [
+					'callback' => [ $this, 'list' ],
 				],
-				'post'    => [
-					'callback' => [ $this, 'create_item' ],
+				'post' => [
+					'callback' => [ $this, 'create' ],
 					'args'     => [
 						'slug' => [
 							'required'          => false,
@@ -42,14 +58,14 @@ class RestController {
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'data' => [
-							'required'          => true,
+							'required' => true,
 						]
 					]
 				]
 			],
-			'items/(?P<slug>[a-z0-9-]+)'              => [
-				'get' => [
-					'callback' => [ $this, 'get_item' ],
+			self::ITEM_TYPE_PLURAL . '/(?P<slug>[a-z0-9-]+)' => [
+				'get'    => [
+					'callback' => [ $this, 'get' ],
 					'args'     => [
 						'slug' => [
 							'required'          => true,
@@ -58,10 +74,10 @@ class RestController {
 						],
 					],
 				],
-				'put' => [
-					'callback' => [ $this, 'update_item' ],
+				'put'    => [
+					'callback' => [ $this, 'update' ],
 					'args'     => [
-						'slug'  => [
+						'slug' => [
 							'required'          => true,
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_text_field',
@@ -72,9 +88,9 @@ class RestController {
 					],
 				],
 				'delete' => [
-					'callback' => [ $this, 'delete_item' ],
+					'callback' => [ $this, 'delete' ],
 					'args'     => [
-						'slug'  => [
+						'slug' => [
 							'required'          => true,
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_text_field',
@@ -89,8 +105,9 @@ class RestController {
 		 *
 		 * @param array $endpoints The endpoint definitions.
 		 */
-		return apply_filters( 'archetype_rest_endpoints', $endpoints );
+		return apply_filters( 'plugin_base_rest_endpoints', $endpoints );
 	}
+
 	/**
 	 * Register the admin CRUD routes.
 	 *
@@ -124,63 +141,93 @@ class RestController {
 
 	/**
 	 * Only users who can manage_options (filterable) may use this API.
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 *
+	 * @return bool True if the user has permission, false otherwise.
 	 */
-	public function check_permission(): bool {
-		return current_user_can( apply_filters( 'plugin_base_manage_capability', 'manage_options' ) );
+	public function check_permission( \WP_REST_Request $request ): bool {
+		/**
+		 * Filter the capability required to manage plugin-base items.
+		 *
+		 * @param string $permission The capability required to manage plugin-base items.
+		 */
+		$permission = apply_filters( 'plugin_base_manage_capability', 'manage_options' );
+		$can        = current_user_can( $permission );
+
+
+		/**
+		 * Filter the result of the permission check.
+		 *
+		 * @param bool             $can        Whether the user has permission to manage plugin-base items.
+		 * @param string           $permission The capability required to manage plugin-base items.
+		 * @param \WP_REST_Request $request    The request object.
+		 *
+		 * @return bool True if the user has permission, false otherwise.
+		 */
+		return apply_filters( 'plugin_base_check_rest_permission', $can, $permission, $request );
 	}
 
 	/**
 	 * List items.
 	 * @return \WP_REST_Response
 	 */
-	public function list_items(): \WP_REST_Response {
+	public function list(): \WP_REST_Response {
 		return new \WP_REST_Response( ConfigStore::list_summaries() );
 	}
 
-	public function create_item( \WP_REST_Request $request ) {
+	public function create( \WP_REST_Request $request ) {
 		$slug = $request->get_param( 'slug' );
 		$data = $request->get_param( 'data' );
 
 		$slug = ConfigStore::create( $slug, $data );
 
 		if ( false === $slug ) {
-			return new \WP_Error( 'plugin_base_item_exists', __( 'That item already exists.', 'plugin-base' ), [ 'status' => 409 ] );
+			$error_code = 'plugin_base_' . self::ITEM_TYPE_SINGLE . '_exists';
+			$message    = sprintf( __( 'That %s already exists.', 'plugin-base' ), self::ITEM_TYPE_SINGLE );
+			return new \WP_Error( $error_code, $message, [ 'status' => 409 ] );
 		}
 
-		return new \WP_REST_Response( ['slug' => $slug, 'data' => $data], 201 );
+		return new \WP_REST_Response( [ 'slug' => $slug, 'data' => $data ], 201 );
 	}
 
-	public function get_item( \WP_REST_Request $request ) {
+	public function get( \WP_REST_Request $request ) {
 		$slug = (string) $request->get_param( 'slug' );
-		$data       = ConfigStore::get( $slug );
+		$data = ConfigStore::get( $slug );
 
 		if ( null === $data ) {
-			return new \WP_Error( 'plugin_base_not_found', __( 'Item not found.', 'plugin-base' ), [ 'status' => 404 ] );
+			$error_code = 'plugin_base_' . self::ITEM_TYPE_SINGLE . '_not_found';
+			$message    = sprintf( __( 'That %s does not exist.', 'plugin-base' ), self::ITEM_TYPE_SINGLE );
+			return new \WP_Error( $error_code, $message, [ 'status' => 404 ] );
 		}
 
-		return new \WP_REST_Response( ['slug' => $slug, 'data' => $data] );
+		return new \WP_REST_Response( [ 'slug' => $slug, 'data' => $data ] );
 	}
 
-	public function update_item( \WP_REST_Request $request ) {
-		$slug = (string) $request->get_param( 'slug' );
-		$existing   = ConfigStore::get( $slug );
+	public function update( \WP_REST_Request $request ) {
+		$slug     = (string) $request->get_param( 'slug' );
+		$existing = ConfigStore::get( $slug );
 
 		if ( null === $existing ) {
-			return new \WP_Error( 'plugin_base_not_found', __( 'Item not found.', 'plugin-base' ), [ 'status' => 404 ] );
+			$error_code = 'plugin_base_' . self::ITEM_TYPE_SINGLE . '_not_found';
+			$message    = sprintf( __( 'That %s does not exist.', 'plugin-base' ), self::ITEM_TYPE_SINGLE );
+			return new \WP_Error( $error_code, $message, [ 'status' => 404 ] );
 		}
 
 		$data = $request->get_param( 'data' );
 
 		ConfigStore::update( $slug, $data );
 
-		return new \WP_REST_Response( ['slug' => $slug, 'data' => $data] );
+		return new \WP_REST_Response( [ 'slug' => $slug, 'data' => $data ] );
 	}
 
-	public function delete_item( \WP_REST_Request $request ) {
+	public function delete( \WP_REST_Request $request ) {
 		$deleted = ConfigStore::delete( (string) $request->get_param( 'slug' ) );
 
 		if ( ! $deleted ) {
-			return new \WP_Error( 'plugin_base_not_found', __( 'Item not found.', 'plugin-base' ), [ 'status' => 404 ] );
+			$error_code = 'plugin_base_' . self::ITEM_TYPE_SINGLE . '_not_found';
+			$message    = sprintf( __( 'That %s does not exist.', 'plugin-base' ), self::ITEM_TYPE_SINGLE );
+			return new \WP_Error( $error_code, $message, [ 'status' => 404 ] );
 		}
 
 		return new \WP_REST_Response( null, 204 );
