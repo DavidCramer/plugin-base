@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "block-boilerplate/basic-block",
+  "title": "Basic Block",
+  "category": "widgets",
+  "description": "A simple basic block",
+  "keywords": [
+    "content"
+  ],
+  "version": "1.0.0",
+  "textdomain": "block-boilerplate",
+  "attributes": {
+    "source": {
+      "type": "string",
+      "default": "default_value"
+    }
+  },
+  "script": [
+    "script-handle"
+  ],
+  "editorScript": [
+    "editor-script-handle"
+  ],
+  "editorStyle": [
+    "editor-style-handle"
+  ],
+  "style": [
+    "style-handle"
+  ]
+}
