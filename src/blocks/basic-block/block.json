@@ -3,10 +3,10 @@
   "apiVersion": 3,
   "name": "block-boilerplate/basic-block",
   "title": "Basic Block",
-  "category": "widgets",
+  "category": "plugin-base",
   "description": "A simple basic block",
   "keywords": [
-    "content"
+    "plugin-base"
   ],
   "version": "1.0.0",
   "textdomain": "block-boilerplate",
@@ -17,15 +17,15 @@
     }
   },
   "script": [
-    "script-handle"
+    "file:./script.js"
   ],
   "editorScript": [
-    "editor-script-handle"
+    "file:./editor.js"
   ],
   "editorStyle": [
-    "editor-style-handle"
+    "file:./editor.css"
   ],
   "style": [
-    "style-handle"
+    "file:./style.css"
   ]
 }

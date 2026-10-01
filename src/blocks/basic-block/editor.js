@@ -6,6 +6,7 @@
  *  WordPress dependencies
  */
 import {cog as icon} from '@wordpress/icons';
+import {registerBlockType} from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -22,4 +23,4 @@ const settings = {
 	save: Save,
 };
 
-export {name, settings};
+registerBlockType(name, settings);

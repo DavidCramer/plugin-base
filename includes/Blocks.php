@@ -33,6 +33,7 @@ class Blocks {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_blocks' ] );
+		add_filter( 'block_categories_all', [ $this, 'register_block_category' ] );
 	}
 
 	/**
@@ -48,4 +49,25 @@ class Blocks {
 			register_block_type( PLUGIN_BASE_PATH . 'blocks/' . $block );
 		}
 	}
+
+	/**
+	 * Register block category.
+	 *
+	 * @param array $categories The existing categories.
+	 *
+	 * @return array The modified categories.
+	 */
+	public function register_block_category( $categories = [] ) {
+
+		$pg_category = [
+			'slug'  => 'plugin-base',
+			'title' => __( 'Plugin Base', 'plugin-base' ),
+		];
+
+		// Add the custom category to the beginning of the categories array.
+		array_unshift( $categories, $pg_category );
+
+		return $categories;
+	}
+
 }
