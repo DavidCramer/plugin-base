@@ -42,10 +42,10 @@ class Blocks {
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
 		}
-		$manifest = include SJC_CONTENT_TYPES_PATH . 'blocks/blocks-manifest.php';
+		$manifest = include PLUGIN_BASE_PATH . 'blocks/blocks-manifest.php';
 		$keys     = array_keys( $manifest );
 		foreach ( $keys as $block ) {
-			register_block_type( SJC_CONTENT_TYPES_PATH . 'blocks/' . $block );
+			register_block_type( PLUGIN_BASE_PATH . 'blocks/' . $block );
 		}
 	}
 }
