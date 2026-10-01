@@ -17,6 +17,7 @@
     "@wordpress/element": "^8.8.0",
     "@wordpress/i18n": "^6.29.0",
     "@wordpress/components": "^41.0.0",
+    "@wordpress/data": "^10.56.0",
     "lucide-react": "^1.49.0",
     "archetype": "git@github.com:DavidCramer/archetype-components.git#develop",
     "react": "^19.2.8",

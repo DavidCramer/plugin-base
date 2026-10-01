@@ -64,7 +64,8 @@ class Plugin {
 	 */
 	private function boot(): void {
 		$this->components = [
-			'rest' => new RestController(),
+			'rest'   => new RestController(),
+			'blocks' => new Blocks( $this ),
 		];
 
 		if ( is_admin() ) {
