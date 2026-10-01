@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "block-boilerplate/basic-block",
+  "name": "plugin-base/basic-block",
   "title": "Basic Block",
   "category": "plugin-base",
   "description": "A simple basic block",
@@ -9,7 +9,7 @@
     "plugin-base"
   ],
   "version": "1.0.0",
-  "textdomain": "block-boilerplate",
+  "textdomain": "plugin-base",
   "attributes": {
     "source": {
       "type": "string",
