@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "PluginBase admin app",
   "scripts": {
-    "dev": "vite",
-    "start": "wp-scripts start --source-path=src/blocks --output-path=blocks --blocks-manifest",
-    "build": "vite build && wp-scripts build --source-path=src/blocks --output-path=blocks --blocks-manifest",
+    "dev": "concurrently \"npm run dev:admin\" \"npm run dev:blocks\"",
+    "dev:admin": "vite",
+    "dev:blocks": "wp-scripts start --hot --source-path=src/blocks --output-path=blocks --blocks-manifest",
+    "build": "npm run build:admin && npm run build:blocks",
+    "build:admin": "vite build",
+    "build:blocks": "wp-scripts build --source-path=src/blocks --output-path=blocks --blocks-manifest",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
@@ -14,12 +17,12 @@
   "dependencies": {
     "@wordpress/block-editor": "^18.0.0",
     "@wordpress/blocks": "^16.1.0",
-    "@wordpress/element": "^8.8.0",
-    "@wordpress/i18n": "^6.29.0",
     "@wordpress/components": "^41.0.0",
     "@wordpress/data": "^10.56.0",
-    "lucide-react": "^1.49.0",
+    "@wordpress/element": "^8.8.0",
+    "@wordpress/i18n": "^6.29.0",
     "archetype": "git@github.com:DavidCramer/archetype-components.git#develop",
+    "lucide-react": "^1.49.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
@@ -28,14 +31,16 @@
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
-    "@wordpress/scripts": "^36.0.0",
     "@wordpress/icons": "^17.0.0",
+    "@wordpress/scripts": "^36.0.0",
+    "concurrently": "^10.0.5",
     "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.1"
+    "vite": "^8.3.1",
+    "webpackbar": "^7.0.0"
   }
 }
