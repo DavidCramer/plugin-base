@@ -10,6 +10,8 @@
     "build:admin": "vite build",
     "build:blocks": "wp-scripts build --source-path=src/blocks --output-path=blocks --blocks-manifest",
     "preview": "vite preview",
+    "release": "npm run build && npm run dist",
+    "dist": "gulp dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
     "setup": "node scripts/setup.js"
@@ -38,6 +40,12 @@
     "eslint": "^10.11.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-filter": "^9.0.1",
+    "gulp-newer": "^1.4.0",
+    "gulp-zip": "^6.1.0",
+
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
